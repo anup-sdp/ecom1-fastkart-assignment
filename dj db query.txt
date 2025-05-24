@@ -1,0 +1,13 @@
+cart = Cart.objects.all()
+cart = Cart.objects.filter(user=request.user).last()
+cart = Cart.objects.filter(user=request.user).order_by('-created_at').first()
+if not cart:
+    cart = Cart.objects.create(user=request.user, status='open')
+status = [open, submitted, abandoned, cancelled]
+cart = Cart.objects.get(user=request.user)  # expects only 1, error if multiple
+cart = get_object_or_404(Cart, user = request.user)  
+# for multiple objects/carts it raises a MultipleObjectsReturned exception, just like the standard Django Model.objects.get() method.
+
+cart, created = Cart.objects.get_or_create(user=request.user, defaults={'status': 'open'})
+# returns a tuple
+#  will raise MultipleObjectsReturned if multiple carts exist for that user.

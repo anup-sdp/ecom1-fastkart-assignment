@@ -1,0 +1,15 @@
+<!-- products/templates/products/potato_images.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>product images</title>
+</head>
+<body>
+	<p>Images of Potato:</p>
+	{% for image in images %}
+	    <img src="{{ image.image.url }}" alt="potato" style="height:100px; margin: 10px;">
+	{% endfor %}
+</body>
+</html>

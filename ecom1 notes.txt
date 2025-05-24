@@ -1,0 +1,166 @@
+13.2:
+e-commerce(FastKart) class 1-7(13-19), module 22-23, - by yasir mahbub
+full app: https://github.com/yasirmahabub/FastKart-E-Commerce
+
+cmd:
+pip install virtualenv
+python -m venv myenv
+venv311\Scripts\activate  ---------- 
+pip install django
+
+code .
+
+create .gitignore
+
+-----
+django-admin startproject fastkart . ---
+python manage.py runserver  ----------
+ctrl+c
+apps: accounts, carts, orders, products (start with app which has the least dependency)
+python manage.py startapp accounts ---
+create CustomUser model
+...
+pip freeze
+pip install -r requirements.txt
+
+copy views.py, forms.py, utils.py
+python manage.py makemigrations
+python manage.py migrate
+
+class-2
+signup view()
+copy templates, staticfiles
+verify_email()
+user_login()
+user_logout()
+pip install certifi (to fix an error)
+
+
+class-3,
+use django-environ (environ) to hide EMAIL_HOST_USER, EMAIL_HOST_PASSWORD from settings.py
+and keep them in .env file.
+check in console:
+python manage.py shell
+>>> from django.conf import settings
+>>> print(settings.EMAIL_HOST_USER)
+output: anup30coc@gmail.com (ok)
+
+reset_password()
+user_profile(): to show latter
+
+
+class-4
+products app:
+python manage.py startapp products
+erd entities: Product, ProductImage, Category, Review
+models.py: TimeStampedModel, Category, Product, Review, ProductImage
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+
+class-5:
+createsuperuser problem: not being able to create as no username:
+in class AbstractUser(inheritted by our CustomUser) there is, objects = UserManager(), 
+it defines create_superuser(), override it by CustomUserManager.
+create accounts/managers.py: write CustomUserManager class.
+write in accounts/admin.py:
+
+python manage.py createsuperuser
+
+email: admin@example.com
+pw:12345
+---------------
+email: anup@example.com
+pw: abc123
+
+normal users:
+anupbarua30@gmail.com
+-abc123
+anup30clans@gmail.com
+-abc123
+
+at 50:00: debugger vs code. 
+eg: https://forum.codewithmosh.com/t/how-do-i-learn-debugging-django-vs-code-program/27680
+set breakpoints in user_signup()
+in variables can see values
+also in watch, can write form.is_valid(), form.errors etc to see values
+
+user account details edit
+products.home view
+brief show: carts, orders
+
+
+
+class-6:
+at 41:00, fixed : http://127.0.0.1:8000/categories/electronics/products
+
+
+at 58:00 (yasir fixed error? http://127.0.0.1:8000/products/potato/ how?)
+removed {% load custom_filters %} in product-left-thumbnail.html
+- i fixed by my custom edit in product-left-thumbnail.html
+
+at 1:12:00
+review added in db, show in page?
+at 1:18:31
+
+
+at 1:21, python manage.py startapp carts, 
+models.py: Cart, CartProduct,
+python manage.py makemigrations
+python manage.py migrate
+resgister in admin.py
+
+
+at 1:57
+add to cart  + - in 2 pages:
+http://127.0.0.1:8000/products/potato/  
+-- in product details page (product-left-thumbnail.html)
+http://127.0.0.1:8000/categories/electronics/products  
+-- in category products page (category_products.html)
+## ctrl+p : search files.
+## ctrl+shift+f: "add_cart": search in vs code explorer(find text inside files)
+
+
+
+
+class-7:
+python manage.py startapp orders
+write models.py
+at 1:32:30  sslcommerz:
+developer.sslcommerz.com : create demo/sandboxed account
+0-anup30-mpsslcomerz-
+add SSLCOMMERZ info in setting.py
+https://stackoverflow.com/questions/68275177/how-can-i-integrate-sslcommerze-to-my-django-app
+install sslcommerz-python-api 1.0.1: pip install sslcommerz-python-api
+run:
+pip list : to see installed packages.
+pip freeze > requirements.txt  : to generate requirements.txt file
+at 2:47:00
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======================
+github upload:
+git init
+git status
+git add .
+git status
+git commit -m "initial commit"
+git status
+github: create repo
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/anup-sdp/ecom1-fastkart.git
+git push -u origin main

@@ -1,0 +1,339 @@
+<!-- products home -->
+{% extends 'base-global.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- Home Section Start -->
+<!-- <section class="home-section-2 home-section-bg pt-0 overflow-hidden">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-12">
+                <div class="slider-animate">
+                    <div>
+                        <div class="home-contain rounded-0 p-0">
+                            <img src="{% static 'assets/images/grocery/banner/download.jpeg'%}"
+                                class="img-fluid bg-img blur-up lazyload" alt="">
+                            <div class="home-detail home-big-space p-center-left home-overlay position-relative">
+                                <div class="container-fluid-lg">
+                                    <div>
+                                        <h6 class="ls-expanded theme-color text-uppercase">Weekend Special offer
+                                        </h6>
+                                        <h1 class="heding-2">Premium Quality Dry Fruits</h1>
+                                        <h2 class="content-2">Dryfruits shopping made Easy</h2>
+                                        <h5 class="text-content">Fresh & Top Quality Dry Fruits are available here!
+                                        </h5>
+                                        <button
+                                            class="btn theme-bg-color btn-md text-white fw-bold mt-md-4 mt-2 mend-auto"
+                                            onclick="location.href = 'shop-left-sidebar.html';">Shop Now <i class="fa-solid fa-arrow-right icon"></i></button>                                                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- Home Section End -->
+
+<!-- Messages section -->
+<section class="container">
+	<div class="row">
+		<div class="col-12">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</section>
+
+<!-- Banner Section Start --> <!-- ----------------------------------------------------------------------------------- -->
+<!-- <section class="banner-section banner-small ratio_65">
+    <div class="container-fluid-lg">
+        <div class="slider-4-banner no-arrow slick-height">
+            <div>
+                <div class=" banner-contain-3 hover-effect">
+                    <a href="javascript:void(0)">
+                        <img src="{% static 'assets/images/grocery/banner/111.png'%}" class="bg-img blur-up lazyload"
+                            alt="">
+                    </a>
+                    <div class="banner-detail p-center-left w-75 banner-p-sm mend-auto">
+                        <div>
+                            <h5 class="fw-light mb-2">50% Discount</h5>
+                            <h4 class="fw-bold mb-0">Summer Ice Cream</h4>							
+                            <button onclick="location.href = 'shop-left-sidebar.html';"
+                                class="btn shop-now-button mt-3 ps-0 mend-auto theme-color fw-bold">Shop Now <i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="banner-contain-3 hover-effect">
+                    <a href="javascript:void(0)">
+                        <img src="{% static 'assets/images/grocery/banner/111.png'%}" class="img-fluid bg-img" alt="">
+                    </a>
+                    <div class="banner-detail p-center-left w-75 banner-p-sm mend-auto">
+                        <div>
+                            <h5 class="fw-light mb-2">Today Special</h5>
+                            <h4 class="fw-bold mb-0">Fruits Juice Series</h4>							
+                            <button onclick="location.href = 'shop-left-sidebar.html';"
+                                class="btn shop-now-button mt-3 ps-0 mend-auto theme-color fw-bold">Shop Now <i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="banner-contain-3 hover-effect">
+                    <a href="javascript:void(0)">
+                        <img src="{% static 'assets/images/grocery/banner/111.png' %}"
+                            class="blur-up lazyload bg-img" alt="">
+                    </a>
+                    <div class="banner-detail p-center-left w-75 banner-p-sm mend-auto">
+                        <div>
+                            <h5 class="fw-light mb-2">Combo Offer</h5>
+                            <h4 class="fw-bold mb-0">Eat Healthy Be Healthy </h4>
+                            <button onclick="location.href = 'shop-left-sidebar.html';"
+                                class="btn shop-now-button mt-3 ps-0 mend-auto theme-color fw-bold">Shop Now <i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="banner-contain-3 hover-effect">
+                    <a href="javascript:void(0)">
+                        <img src="{% static 'assets/images/grocery/banner/111.png'%}" class="blur-up lazyload bg-img"
+                            alt="">
+                    </a>
+                    <div class="banner-detail p-center-left w-75 banner-p-sm mend-auto">
+                        <div>
+                            <h5 class="fw-light mb-2">Amazing Deals</h5>
+                            <h4 class="fw-bold mb-0">As Fresh As Fruit </h4>
+                            <button onclick="location.href = 'shop-left-sidebar.html';"
+                                class="btn shop-now-button mt-3 ps-0 mend-auto theme-color fw-bold">Shop Now <i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="banner-contain-3 hover-effect">
+                    <a href="javascript:void(0)">
+                        <img src="{% static 'assets/images/grocery/banner/111.png'%}" class="blur-up lazyload bg-img"
+                            alt="">
+                    </a>
+                    <div class="banner-detail p-center-left w-75 banner-p-sm mend-auto">
+                        <div>
+                            <h5 class="fw-light mb-2">Amazing Deals</h5>
+                            <h4 class="fw-bold mb-0">As Fresh As Fruit </h4>
+                            <button onclick="location.href = 'shop-left-sidebar.html';"
+                                class="btn shop-now-button mt-3 ps-0 mend-auto theme-color fw-bold">Shop Now <i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- Banner Section End -->
+
+<!-- --------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- Carousel Section Start -->
+<style>
+/* Custom Carousel Styles */
+.carousel-image-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.carousel_images{
+	max-width: 100%;
+    max-height: 100%;
+	width: 100%;
+	height: 100%;
+	object-fit: contain; /* contain, cover, fill, none, scale-down*/
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 50%;
+    background-size: 1.5rem;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background-color: transparent;
+}
+
+.carousel-indicators .active {
+    background-color: #fff;
+}
+
+.carousel-caption {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 80%;    	
+    border-radius: 5px;
+}
+
+</style>
+<section class="product-carousel-section py-5">
+    <div class="container">
+        <div class="title">
+            <h2>Featured Products</h2>
+        </div>
+        <div class="row  justify-content-center">
+			<div class="col-6">
+				<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+                {% for product in products %}
+                <button type="button" data-bs-target="#productCarousel" 
+                        data-bs-slide-to="{{ forloop.counter0 }}" 
+                        {% if forloop.first %}class="active" aria-current="true"{% endif %} 
+                        aria-label="Slide {{ forloop.counter }}"></button>
+                {% endfor %}
+            </div>
+            
+            <!-- Carousel Items -->
+			<div class="carousel-inner">
+			    {% for product in products %}
+			    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+			        <div class="carousel-image-container" style="width: 400px; height: 400px; margin: 0 auto;">
+			            <a href="{% url 'product_detail' product.slug %}" class="d-block w-100 h-100 position-relative">
+			                {% if product.images.first %}
+			                    <img class="carousel_images" src="{{ product.images.first.image.url }}" 
+			                         alt="{{ product.name }}"
+			                         style="background-color: #eee;">
+			                {% else %}
+			                    <div class="d-flex align-items-center justify-content-center w-100 h-100 bg-light">
+			                        <i class="fas fa-image fa-3x text-muted"></i>
+			                    </div>
+			                {% endif %}
+			                <!-- New Arrival Badge -->
+			                {% if product.is_new %}
+			                    <span class="badge rounded-pill bg-success bg-opacity-75 position-absolute top-0 start-0 mt-2 ms-2 px-2 py-2">New Arrival</span>
+			                {% endif %}
+			            </a>
+			        </div>
+			        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-25">  <!-- bg-opacity: 0, 10, 25, 50, 75, 100, full transparent to full opaque -->	
+			            <h3 class="text-white mb-1">{{ product.name }}</h3>
+			            <p class="text-white mb-0">
+			                $ {{ product.discount_price|floatformat:2 }}
+			                {% if product.discount_percentage > 0 %}
+			                    <del class="text-muted">$ {{ product.price }}</del>
+			                    <span class="badge bg-danger ms-2">{{ product.discount_percentage }}% OFF</span>
+			                {% endif %}
+			            </p>
+			        </div>
+			    </div>
+			    {% empty %}
+			        <div class="alert alert-warning">No products available</div>
+			    {% endfor %}
+			</div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+			</div>
+		</div>
+        
+    </div>
+</section>
+<!-- Carousel Section End -->
+<!-- --------------------------------------------------------------------------------------------------------------------------------- -->
+
+<!-- Category Section Start -->
+<section class="category-section-3">
+    <div class="container">  <!-- class="container-fluid-lg" -->		
+        <div class="title">
+            <h2>Shop By Categories</h2>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="category-slider-1 arrow-slider wow fadeInUp">
+                    {% for category in categories %}
+                    <div>
+                        <div class="category-box-list">
+                            <a href="{% url 'category_products' category.slug %}" class="category-name">
+                                <h4>{{category.name}}</h4>
+                                <h6>{{category.product_count}} items</h6>
+                            </a>
+                            <div class="category-box-view">
+                                <a href="{% url 'category_products' category.slug %}">
+                                    <img src="{{ category.image.url }}" class="img-fluid blur-up lazyload"
+                                        alt="{{category.name}}">
+                                </a>
+								<!-- #TODO: set category_products page -->
+								<!--  using as -->
+
+								<!-- {% url "category_products" category.slug as category_url %}
+								<button onclick="location.href = '{{ category_url }}';" class="btn shop-button">
+									<span>Shop Now</span>
+									<i class="fas fa-angle-right"></i>
+								</button> -->
+
+								<!-- #TODO: set category_products page -->
+								<!-- using with -->
+
+								<!-- {% with category_products='category_products' %}								
+								<button onclick="location.href = '{% url category_products category.slug %}';" class="btn shop-button">{% endwith %}									
+									<span>Shop Now</span>
+									<i class="fas fa-angle-right"></i>
+								</button> -->
+
+								<!-- wrapping by a tag-->
+								<!-- <a href="{% url 'category_products' category.slug %}">
+									<button class="btn shop-button">
+										<span>Shop Now</span>
+										<i class="fas fa-angle-right"></i>
+									</button>
+								</a> -->
+
+								<a href="{% url 'category_products' category.slug %}" class="btn shop-button">
+									<span>Shop Now</span>
+									<i class="fas fa-angle-right"></i>
+								</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Category Section End -->
+
+
+{% endblock %}

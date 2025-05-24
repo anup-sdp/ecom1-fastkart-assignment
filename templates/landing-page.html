@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>landing page</title>
+	<style>
+		body{
+			width: 90%;
+			margin: 10px 50px;
+			background-color: whitesmoke;
+		}
+		button {
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+	</style>
+</head>
+<body>
+	<p>Landing page of fastkart app.</p>
+	<p>class 1-5 implemaentation.</p>
+	<h3>Hello{% if username %}, {{ username }}{% endif %}</h3>
+	<!-- {% if username %}, <a href="{% url 'logout' %}"><button>logout</button></a>{% endif %} --> <!-- calls in get method -->
+	{% if username %}
+		<form action="{% url 'logout' %}" method="post">
+			{% csrf_token %}
+			<button type="submit" class="logout-btn">Logout</button>
+		</form>
+	{% endif %}		
+	{% if not username %}            
+		<p>go to: <a href="{% url 'login' %}"><button>login page</button></a></p>
+		<p>go to: <a href="{% url 'signup' %}"><button>registration page</button></a></p>
+    {% else %}
+		<p>go to: <a href="{% url 'profile' %}"><button>My Profile</button></a></p>
+    {% endif %}	
+	<a href="{% url 'home' %}"><button>products-home</button></a> <br><br>
+	<a href="{% url 'potato_images' %}"><button>potato product images</button></a> <br><br>
+	<a href="{% url 'admin:index' %}"><button>to admin page</button></a>
+
+	<!-- <form action="{% url 'potato_images' %}" method="get" style="display: inline;">
+		<button type="submit">potato product images</button>
+	</form> -->
+
+	<!-- {% url 'potato_images' as potato_url %}
+	<button onclick="window.location.href='{{ potato_url }}'">potato product images</button> -->
+	
+
+	<!-- <button type="button" onclick="goToPotatoImages()">
+		Potato Product Images
+	</button> -->
+	
+	<script>
+		function goToPotatoImages() {
+			window.location.href = "{% url 'potato_images' %}";
+		}
+	</script>
+
+</body>
+</html>
+<!-- 🎉 🚀 -->

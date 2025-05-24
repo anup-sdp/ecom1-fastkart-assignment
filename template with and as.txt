@@ -1,0 +1,26 @@
+<!-- #TODO: set category_products page -->
+
+<!--  using as -->
+{% url "category_products" category.slug as category_url %}
+<button onclick="location.href = '{{ category_url }}';" class="btn shop-button">
+	<span>Shop Now</span>
+	<i class="fas fa-angle-right"></i>
+</button>
+
+<!-- #TODO: set category_products page -->
+
+<!-- using with -->
+{% with category_products='category_products' %}								
+<button onclick="location.href = '{% url category_products category.slug %}';" class="btn shop-button">{% endwith %}									
+	<span>Shop Now</span>
+	<i class="fas fa-angle-right"></i>
+</button>
+
+
+<!--  without button -->
+<!-- <a
+	href="{% url 'product_detail' product.slug %}"
+	class="btn theme-bg-color view-button icon text-white fw-bold btn-md"
+>
+	View More Details
+</a> -->

@@ -1,0 +1,72 @@
+ans: use context processor.
+question:
+my django project "fastkart" an ecommerce project, it's base.html has:
+<!-- shopping cart icon ------------------ -->
+<a href="{% url 'cart_detail' %}" class="header-icon bag-icon">
+    <small class="badge-number badge-light">{{cart_count}}</small>
+    <i class="fas fa-shopping-bag"></i>
+</a>
+
+the cart_count is currently added items in the cart.
+the project has 10-12 views. instead of passing cart_count for all views, 
+how to set it globally, is there any way. or do django have something like 
+state management in flutter.
+
+# -----------
+the cart_count is in carts app's model.py:
+from django.db import models
+
+from accounts.models import CustomUser
+from products.models import Product, TimeStampedModel
+
+
+class Cart(TimeStampedModel):
+    # user = models.ForeignKey(CustomUser, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, null=True, related_name="carts", on_delete=models.CASCADE)  # each user can have 1 cart, null=True, for non-user's Cart
+    # user = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE, related_name='carts')
+    session_key = models.CharField(max_length=255, null=True, blank=True) # now optional,  unique=True if each session should have at most one cart?
+    
+    # has created_at and updated_at from TimeStampedModel
+    def __str__(self):
+        return self.session_key
+
+
+class CartProduct(TimeStampedModel):  # was CartItem
+    cart = models.ForeignKey(Cart, related_name="cart_products", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name="cart_products", on_delete=models.CASCADE, null=True)  # on_delete=models.DO_NOTHING
+    quantity = models.PositiveSmallIntegerField(default=0)
+
+    def sub_total(self):
+        return self.product.discount_price * self.quantity
+
+    def __str__(self):
+        return f"CartItem: {self.product.name}"
+
+# -------------------------
+for example, in carts>views.py for cart detail page cart_count is sent manually:
+
+
+def cart_detail(request, total_price=0, quantity=0, cart_items=None):
+    session_key=get_session_key(request)
+    if request.user.is_authenticated:
+        #cart = get_object_or_404(Cart, user=request.user) # disabled to not see Page not found (404), when user has no cart.
+        cart, created = Cart.objects.get_or_create(user=request.user, defaults={'session_key': session_key})  # get_or_create() returns tuple.
+
+    else:
+        cart, created = Cart.objects.get_or_create(session_key=session_key, defaults={'user': None})
+    cart_items = CartProduct.objects.filter(cart=cart).select_related("product")  # "product" is field name, not related_name
+    total_price = 0
+    for item in cart_items:
+        total_price += item.product.price * item.quantity  # discount_percentage ? # in case of n+1 problem, for each item there will be a query.
+        quantity += item.quantity
+
+    context = {
+        "total_price": total_price,
+        "quantity": quantity,
+        "cart_items": cart_items,
+        "cart_count": quantity,        
+        "grand_total": total_price + getattr(settings, 'DELIVERY_CHARGE', 0),  # extend + add tax etc
+    }
+    return render(request, "carts/cart.html", context)
+
+# ------------------

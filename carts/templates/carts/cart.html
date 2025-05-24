@@ -1,0 +1,264 @@
+{% extends 'base-global.html' %}
+{% load static %}
+{% block title %}Carts{% endblock %}
+{% block content %}
+
+    <!-- Breadcrumb Section Start -->
+    <section class="breadcrumb-section pt-0">
+        <div class="container-fluid-lg">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-contain">
+                        <h2>Cart</h2>
+                        <nav>
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html">
+                                        <i class="fa-solid fa-house"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">Cart</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+	 <!-- Messages section -->
+	<section class="container">
+		<div class="row">
+			<div class="col-12">
+				{% if messages %}
+					{% for message in messages %}
+						<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+							{{ message }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</section>
+	
+{% if not cart_items %}
+	<h2 class="text-center">Your Shopping Cart is Empty</h2>
+	<br>
+	<div class="text-center">
+		<a href="{% url 'home' %}" class="btn btn-primary">Continue Shopping</a>
+	</div>
+{% else %}
+    <!-- Cart Section Start -->
+    <section class="cart-section section-b-space">
+        <div class="container-fluid-lg">
+            <div class="row g-sm-5 g-3">
+                <div class="col-xxl-9">
+                    <div class="cart-table">
+                        <div class="table-responsive-xl">
+                            <table class="table">
+                                <tbody>
+                                    {% for cart_item in cart_items %}
+                                    <tr class="product-box-contain">
+                                        <td class="product-detail">
+                                            <div class="product border-0">
+                                                <a href="{% url 'product_detail' cart_item.product.slug %}" class="product-image">
+                                                    <img src="{{ cart_item.product.images.first.image.url }}"
+                                                        class="img-fluid blur-up lazyload" alt="">
+                                                </a>
+                                                <div class="product-detail">
+                                                    <ul>
+                                                        <li class="name">
+                                                            <a href="{% url 'product_detail' cart_item.product.slug %}">{{cart_item.product.name }}</a>
+                                                        </li>
+                                                        <br>
+
+                                                        <li class="text-content"><span
+                                                                class="text-title">Quantity</span> - {{cart_item.product.unit}}
+                                                        </li>
+                                                        <li>
+                                                            <h5 class="text-content d-inline-block">Price :</h5>
+                                                            <span>${{cart_item.product.discount_price}}</span>
+                                                            <span class="text-content">${{cart_item.product.price}}</span>
+                                                        </li>
+
+                                                        <li>
+                                                            <h5 class="saving theme-color">Saving : ${{cart_item.product.price}}-{{cart_item.product.discount_price}}</h5>
+                                                        </li>
+
+                                                        <li class="quantity-price-box">
+                                                            <div class="cart_qty">
+                                                                <div class="input-group">
+                                                                    <button type="button" class="btn qty-left-minus"
+                                                                        data-type="minus" data-field="">
+                                                                        <i class="fa fa-minus ms-0"></i>
+                                                                    </button>
+                                                                    <input class="form-control input-number qty-input"
+                                                                        type="text" name="quantity" value="0">
+                                                                    <button type="button" class="btn qty-right-plus"
+                                                                        data-type="plus" data-field="">
+                                                                        <i class="fa fa-plus ms-0"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <h5>Total: $35.10</h5>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="price">
+                                            <h4 class="table-title text-content">Price</h4>
+                                            <h5>${{cart_item.product.discount_price}} <del class="text-content">${{cart_item.product.price}}</del></h5>
+                                            <h6 class="theme-color">You Save : ${{ cart_item.product.savings | floatformat:2 }}</h6>
+                                        </td>
+
+                                        <!-- <td class="quantity">
+                                            <h4 class="table-title text-content">Qty</h4>
+                                            <div class="quantity-price">
+                                                <div class="cart_qty">
+                                                    <div class="input-group">
+                                                        <a href="{%url 'remove_cart' cart_item.product.slug %}" type="button" class="btn qty-left-minus"
+                                                            data-type="minus" data-field=""> <i class="fa fa-minus ms-0"></i> </a>                                                        
+                                                        <input class="form-control input-number qty-input" type="text" name="quantity" value="{{cart_item.quantity}}">														
+                                                        <a href="{%url 'add_cart' cart_item.product.slug%}" type="button" class="btn qty-right-plus"
+                                                            data-type="plus" data-field=""> <i class="fa fa-plus ms-0"></i> </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td> -->
+
+										<!-- <td class="quantity text-center">
+											<h4 class="table-title text-content">Qty</h4>
+											<div class="d-inline-flex align-items-center">
+											  <a href="{% url 'remove_cart' cart_item.product.slug %}"
+												 class="btn btn-outline-secondary"
+												 style="flex: 0 0 auto;">
+												<i class="fa fa-minus"></i>
+											  </a>
+											  <span class="mx-2" style="flex: 0 0 auto;">
+												{{ cart_item.quantity }}
+											  </span>
+											  <a href="{% url 'add_cart' cart_item.product.slug %}"
+												 class="btn btn-outline-secondary"
+												 style="flex: 0 0 auto;">
+												<i class="fa fa-plus"></i>
+											  </a>
+											</div>
+										</td> -->
+										  
+										<td class="quantity text-center">
+											<h4 class="table-title text-content">Qty</h4>
+											<div class="d-inline-flex align-items-center">
+											  <a href="{% url 'remove_cart' cart_item.product.slug %}"
+												 class="btn btn-outline-secondary btn-sm"
+												 style="flex: 0 0 auto; padding: 0.25rem 0.5rem;">
+												<i class="fa fa-minus" style="font-size:0.75rem;"></i>
+											  </a>
+											  <span class="mx-2 fs-5" style="min-width: 1.5rem; text-align: center;">
+												{{ cart_item.quantity }}
+											  </span>
+											  <a href="{% url 'add_cart' cart_item.product.slug %}"
+												 class="btn btn-outline-secondary btn-sm"
+												 style="flex: 0 0 auto; padding: 0.25rem 0.5rem;">
+												<i class="fa fa-plus" style="font-size:0.75rem;"></i>
+											  </a>
+											</div>
+										</td>
+										  
+
+                                        <td class="subtotal">
+                                            <h4 class="table-title text-content">sub-total</h4>
+                                            <h5>$ {{cart_item.sub_total | floatformat:2}}</h5> <!-- show upto 2 decimal places -->											
+                                        </td>                                      
+										<!-- changed main code, watch if needed -->
+										<td class="save-remove text-center">
+											<h4 class="table-title text-content">Action</h4>
+											<div class="d-flex flex-column align-items-center gap-1 mt-2">
+											  <button type="button"
+													  class="btn btn-outline-primary btn-sm w-auto">
+												Save for later
+											  </button>
+											  {% url 'remove_cart' cart_item.product.slug as remove_cart_url %}
+											  <button type="button" class="btn btn-outline-danger btn-sm w-auto" onclick="location.href='{{ remove_cart_url }}'">
+												Remove
+											  </button>
+											</div>
+										</td>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-3">
+                    <div class="summery-box p-sticky">
+                        <div class="summery-header">
+                            <h3>Cart Total</h3>
+                        </div>
+
+                        <div class="summery-contain">
+                            <div class="coupon-cart">
+                                <h6 class="text-content mb-2">Coupon Apply</h6>
+                                <div class="mb-3 coupon-box input-group">
+                                    <input type="email" class="form-control" id="exampleFormControlInput1"
+                                        placeholder="Enter Coupon Code Here...">
+                                    <button class="btn-apply">Apply</button>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <h4>product total</h4>
+                                    <h4 class="price">$ {{total_price}}</h4>
+                                </li>
+
+                                <li>
+                                    <h4>Coupon Discount</h4>
+                                    <h4 class="price">(-) 0.00</h4>
+                                </li>
+
+                                <li class="align-items-start">
+                                    <h4>Shipping</h4>
+                                    <h4 class="price text-end">$ {{shipping_price}}</h4>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <ul class="summery-total">
+                            <li class="list-total border-top-0">
+                                <h4>Total (USD)</h4>
+                                <h4 class="price theme-color">$ {{grand_total}}</h4>
+                            </li>
+                        </ul>
+
+                        <div class="button-group cart-button">
+                            <ul>
+                                <li>									
+                                    <a href = "{% url 'place_order'%}"
+                                        class="btn btn-animation proceed-btn fw-bold">Process To Checkout</a>  <!-- button, goes to orders app, checkout.html -->										
+                                </li>
+
+                                <li>
+                                    <a href = "{%url 'home'%}"
+                                        class="btn btn-light shopping-button text-dark">
+                                        <i class="fa-solid fa-arrow-left-long"></i>Return To Shopping</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Cart Section End -->
+
+{%  endif %}
+{% endblock %}

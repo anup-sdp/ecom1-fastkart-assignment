@@ -1,3 +1,4 @@
+<!-- from accounts, user_dashboard function -->
 {% extends 'base-global.html' %}
 {% load static %}
 {% block title %}User Dashboard {% endblock %}
@@ -25,21 +26,25 @@
     </div>
 </section>
 <!-- Breadcrumb Section End -->
+<!-- Messages section -->
+<section class="container">
+	<div class="row">
+		<div class="col-12">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</section> 
 <!-- User Dashboard Section Start -->
 <section class="user-dashboard-section section-b-space">
     <div class="container-fluid-lg">
-        <div class="row">
-			<!-- Messages section -->
-			<div class="col-12">
-				{% if messages %}
-					{% for message in messages %}
-						<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-							{{ message }}
-							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-						</div>
-					{% endfor %}
-				{% endif %}
-			</div>
+        <div class="row">			
             <div class="col-xxl-3 col-lg-4">
                 <div class="dashboard-left-sidebar">
                     <div class="close-button d-flex d-lg-none">
@@ -215,35 +220,31 @@
                                                     data-bs-target="#editProfile">Edit</a></h4>
                                         </div>
                                         <div class="dashboard-detail">
-                                            <h6 class="text-content">You are currently not subscribed to any
-                                                newsletter</h6>
+                                            <h6 class="text-content">You are currently not subscribed to any newsletter</h6>                                                
                                         </div>
                                     </div>
 
-                                    <div class="col-12">
+                                    <div class="col-6">
                                         <div class="dashboard-content-title">
                                             <h4>Address Book <a href="javascript:void(0)" data-bs-toggle="modal"
                                                     data-bs-target="#editProfile">Edit</a></h4>
                                         </div>
-
+										<!-- edit address -------------------------------------------- form at line 2315 -->
                                         <div class="row g-4">
-                                            <div class="col-xxl-6">
+                                            <!-- <div class="col-xxl-6">
                                                 <div class="dashboard-detail">
                                                     <h6 class="text-content">Default Billing Address</h6>
-                                                    <h6 class="text-content">You have not set a default billing
-                                                        address.</h6>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit Address</a>
+                                                    <h6 class="text-content">You have not set a default billing address.</h6>                                                        
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Address</a>                                                        
                                                 </div>
-                                            </div>
+                                            </div> -->
 
-                                            <div class="col-xxl-6">
+                                            <div class="col-xxl-12">
                                                 <div class="dashboard-detail">
                                                     <h6 class="text-content">Default Shipping Address</h6>
-                                                    <h6 class="text-content">You have not set a default shipping
-                                                        address.</h6>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#editProfile">Edit Address</a>
+                                                    <h6 class="text-content">set/update default shipping address.</h6>                                                        
+                                                    <!-- <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Address</a>  -->
+													<a href="{% url 'profile' %}" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Address</a>													                                                        
                                                 </div>
                                             </div>
                                         </div>
@@ -709,7 +710,7 @@
                                                     class="blur-up lazyload" alt="">
                                             </a>
 
-                                            <div class="order-wrap">
+                                            <!-- <div class="order-wrap">
                                                 <a href="product-left-thumbnail.html">
                                                     <h3>Fantasy Crunchy Choco Chip Cookies</h3>
                                                 </a>
@@ -763,88 +764,203 @@
                                                         </div>
                                                     </li>
                                                 </ul>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
 
-                                    <div class="order-box dashboard-bg-box">
+                                    <!-- <div class="order-box dashboard-bg-box">
                                         <div class="order-container">
                                             <div class="order-icon">
                                                 <i data-feather="box"></i>
                                             </div>
-
                                             <div class="order-detail">
-                                                <h4>Delivered <span class="success-bg">Success</span></h4>
-                                                <h6 class="text-content">Cheese on toast cheesy grin cheesy grin
-                                                    cottage cheese caerphilly everyone loves cottage cheese the big
-                                                    cheese.</h6>
+                                                <h4>Past Orders <span class="success-bg">Success</span></h4>
+                                                <h6 class="text-content">your list of past orders.</h6>
                                             </div>
-                                        </div>
-
+                                        </div>										
                                         <div class="product-order-detail">
                                             <a href="product-left-thumbnail.html" class="order-image">
-                                                <img src="../assets/images/vegetable/product/2.png" alt=""
+                                                <img src="#" alt=""
                                                     class="blur-up lazyload">
                                             </a>
-
                                             <div class="order-wrap">
-                                                <a href="product-left-thumbnail.html">
-                                                    <h3>Cold Brew Coffee Instant Coffee 50 g</h3>
-                                                </a>
-                                                <p class="text-content">Pecorino paneer port-salut when the cheese
-                                                    comes out everybody's happy red leicester mascarpone blue
-                                                    castello cauliflower cheese.</p>
-                                                <ul class="product-size">
-                                                    <li>
-                                                        <div class="size-box">
-                                                            <h6 class="text-content">Price : </h6>
-                                                            <h5>$20.68</h5>
-                                                        </div>
-                                                    </li>
-
-                                                    <li>
-                                                        <div class="size-box">
-                                                            <h6 class="text-content">Rate : </h6>
-                                                            <div class="product-rating ms-2">
-                                                                <ul class="rating">
-                                                                    <li>
-                                                                        <i data-feather="star" class="fill"></i>
-                                                                    </li>
-                                                                    <li>
-                                                                        <i data-feather="star" class="fill"></i>
-                                                                    </li>
-                                                                    <li>
-                                                                        <i data-feather="star" class="fill"></i>
-                                                                    </li>
-                                                                    <li>
-                                                                        <i data-feather="star" class="fill"></i>
-                                                                    </li>
-                                                                    <li>
-                                                                        <i data-feather="star"></i>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-
-                                                    <li>
-                                                        <div class="size-box">
-                                                            <h6 class="text-content">Sold By : </h6>
-                                                            <h5>Fresho</h5>
-                                                        </div>
-                                                    </li>
-
-                                                    <li>
-                                                        <div class="size-box">
-                                                            <h6 class="text-content">Quantity : </h6>
-                                                            <h5>250 G</h5>
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
+									<!-- accounts/templates/accounts/profile.html - Past Orders Section -->
+																	
+<div class="order-box dashboard-bg-box">
+    <div class="order-container">
+        <div class="order-icon">
+            <i data-feather="box"></i>
+        </div>
+        <div class="order-detail">
+            <h4>Past Orders <span class="success-bg">{{ total_orders }}</span></h4>
+            <h6 class="text-content">Your list of past orders.</h6>
+        </div>
+    </div>
+
+    {% if order_products %}
+        {% for order_product in order_products %}
+            <div class="product-order-detail">
+                <!-- Product Image -->
+                <a href="#" class="order-image">
+                    {% if order_product.product.images.exists %}													 
+                        <img src="{{ order_product.product.images.first.image.url }}" 
+                             alt="{{  order_product.product.name }}"
+                             class="blur-up lazyload">
+                    {% else %}
+                        <img src="https://via.placeholder.com/80x80?text=No+Image " 
+            				alt="No Image"
+            				class="blur-up lazyload">
+                    {% endif %}
+                </a>
+			
+                <!-- Product Details -->
+                <div class="order-wrap">
+                    <h5>{{ order_product.product.name }}</h5>
+                    <p class="text-content">Order #{{ order_product.order.order_number }}</p>
+				
+                    <div class="order-info">
+                        <div class="order-item">
+                            <span class="label">Quantity:</span>
+                            <span class="value">{{ order_product.quantity }}</span>
+                        </div>
+					
+                        <div class="order-item">
+                            <span class="label">Price:</span>
+                            <span class="value">${{ order_product.product_price }}</span>
+                        </div>
+					
+                        <div class="order-item">
+                            <span class="label">Purchase Date:</span>
+                            <span class="value">{{ order_product.created_at|date:"M d, Y" }}</span>
+                        </div>
+					
+                        <div class="order-item">
+                            <span class="label">Status:</span>
+                            <span class="value">
+                                {% if order_product.order.status == 'Completed' %}
+                                    <span class="badge bg-success">{{ order_product.order.status }}</span>
+                                {% elif order_product.order.status == 'Pending' %}
+                                    <span class="badge bg-warning">{{ order_product.order.status }}</span>
+                                {% elif order_product.order.status == 'Cancelled' %}
+                                    <span class="badge bg-danger">{{ order_product.order.status }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ order_product.order.status }}</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-orders">
+            <p>You haven't placed any orders yet.</p>
+            <a href="{% url 'shop' %}" class="btn btn-primary">Start Shopping</a>
+        </div>
+    {% endif %}
+</div>
+									
+									<style>
+									.product-order-detail {
+									    display: flex;
+									    align-items: flex-start;
+									    padding: 20px;
+									    border-bottom: 1px solid #eee;
+									    margin-bottom: 15px;
+									}
+									
+									.order-image {
+									    margin-right: 20px;
+									    flex-shrink: 0;
+									}
+									
+									.order-image img {
+									    width: 80px;
+									    height: 80px;
+									    object-fit: cover;
+									    border-radius: 8px;
+									}
+									
+									.order-wrap {
+									    flex: 1;
+									}
+									
+									.order-wrap h5 {
+									    margin-bottom: 8px;
+									    font-size: 18px;
+									    font-weight: 600;
+									}
+									
+									.order-info {
+									    display: grid;
+									    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+									    gap: 10px;
+									    margin-top: 15px;
+									}
+									
+									.order-item {
+									    display: flex;
+									    justify-content: space-between;
+									    align-items: center;
+									}
+									
+									.order-item .label {
+									    font-weight: 500;
+									    color: #666;
+									}
+									
+									.order-item .value {
+									    font-weight: 600;
+									    color: #333;
+									}
+									
+									.badge {
+									    padding: 4px 8px;
+									    border-radius: 4px;
+									    font-size: 12px;
+									    font-weight: 500;
+									}
+									
+									.bg-success { background-color: #28a745; color: white; }
+									.bg-warning { background-color: #ffc107; color: black; }
+									.bg-danger { background-color: #dc3545; color: white; }
+									.bg-info { background-color: #17a2b8; color: white; }
+									.bg-secondary { background-color: #6c757d; color: white; }
+									
+									.no-orders {
+									    text-align: center;
+									    padding: 40px 20px;
+									}
+									
+									.no-orders p {
+									    font-size: 16px;
+									    color: #666;
+									    margin-bottom: 20px;
+									}
+									
+									@media (max-width: 768px) {
+									    .product-order-detail {
+									        flex-direction: column;
+									        text-align: center;
+									    }
+									
+									    .order-image {
+									        margin-right: 0;
+									        margin-bottom: 15px;
+									    }
+									
+									    .order-info {
+									        grid-template-columns: 1fr;
+									    }
+									}
+									</style>									
+									
+									<!--  -->
                                     <div class="order-box dashboard-bg-box">
                                         <div class="order-container">
                                             <div class="order-icon">
@@ -2312,7 +2428,7 @@
 </div>
 <!-- Location Modal End -->
 
-<!-- Edit Profile Start -->
+<!-- Edit Profile Start ------------------------------------------------------------------------------------------------------- -->
 <form method="POST" enctype="multipart/form-data" action="{% url 'profile' %}">
     {% csrf_token %}
     <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
@@ -2376,9 +2492,13 @@
                             <div class="form-floating theme-form-floating">
                                 <select class="form-select" name="country" id="floatingSelect1">
                                     <option selected>{{ user_info.userprofile.country }}</option>
-                                    <option value="United Kingdom">United Kingdom</option>
-                                    <option value="United States">United States</option>
+									<option value="Bangladesh">Bangladesh</option>
+									<option value="United States">United States</option>
+                                    <option value="United Kingdom">United Kingdom</option>                                    
                                     <option value="France">France</option>
+									<option value="Japan">Japan</option>
+									<option value="International">International</option>
+									<option value="Other">Other</option>
                                     <!-- Add more countries as needed -->
                                 </select>
                                 <label for="floatingSelect1">Country</label>

@@ -940,8 +940,8 @@
                                                     </a>
                                                 </div>
                                             </div>
-                                            <!-- # TODO: add add_cart later --------------------------------------------------------------------- -->
-                                            <a href= "#" class="btn btn-add-cart addcart-button">Add
+                                            <!-- # TODO: add_cart , done --------------------------------------------------------------------- -->
+                                            <a href= "{% url 'add_cart' product.slug %}" class="btn btn-add-cart addcart-button">Add
                                                 <span class="add-icon bg-light-gray">
                                                     <i class="fa-solid fa-plus"></i>
                                                 </span>
@@ -1031,13 +1031,13 @@
 
                                                         </select>
                                                     </div>
+													
 
                                                     <div class="modal-button">
                                                         <!-- # TODO: add add_cart later -->
-														<!-- similar line 920, add to cart ? -->
-														{% url 'product_detail' product.slug as product_detail_url %}
-                                                        <a href= "#" class="btn btn-md add-cart-button icon">Add To Cart</a>                                                            
-                                                            
+														<!-- similar line 920, add to cart ? -->														
+                                                        <a href= "{% url 'add_cart' product.slug %}" class="btn btn-md add-cart-button icon">Add To Cart</a>                                                            
+                                                        {% url 'product_detail' product.slug as product_detail_url %}  <!-- using template as ---------------------------------------- -->    
 														<a onclick="location.href = '{{ product_detail_url }}';"
 															class="btn theme-bg-color view-button icon text-white fw-bold btn-md">
 															View More Details

@@ -1,0 +1,162 @@
+{% extends 'base-global.html' %}
+{% load static %}
+
+{% block title %}Terms & Conditions - FastKart{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white">
+                    <h1 class="h3 mb-0 text-center">Terms & Conditions</h1>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-muted mb-4">
+                        <small>Last updated: {% now "F d, Y" %}</small>
+                    </div>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">1. Acceptance of Terms</h2>
+                        <p class="text-muted">
+                            By accessing and using FastKart ("we," "our," or "us"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                        </p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">2. Website Usage</h2>
+                        <div class="text-muted">
+                            <p>You may use our website for lawful purposes only. You agree not to use the site:</p>
+                            <ul class="ps-4">
+                                <li>In any way that violates any applicable federal, state, local, or international law</li>
+                                <li>To transmit, or procure the sending of, any advertising or promotional material</li>
+                                <li>To impersonate or attempt to impersonate FastKart, a FastKart employee, another user, or any other person or entity</li>
+                                <li>To engage in any other conduct that restricts or inhibits anyone's use or enjoyment of the website</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">3. Account Registration</h2>
+                        <div class="text-muted">
+                            <p>To place orders on FastKart, you must create an account. You agree to:</p>
+                            <ul class="ps-4">
+                                <li>Provide accurate, current, and complete information during registration</li>
+                                <li>Maintain and update your information to keep it accurate, current, and complete</li>
+                                <li>Keep your password secure and confidential</li>
+                                <li>Accept responsibility for all activities that occur under your account</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">4. Products and Services</h2>
+                        <div class="text-muted">
+                            <p>FastKart strives to provide accurate product descriptions and images. However:</p>
+                            <ul class="ps-4">
+                                <li>Product colors may vary due to monitor settings</li>
+                                <li>We reserve the right to modify or discontinue products without notice</li>
+                                <li>All prices are subject to change without prior notice</li>
+                                <li>Product availability is not guaranteed until order confirmation</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">5. Orders and Payment</h2>
+                        <div class="text-muted">
+                            <p><strong>Order Processing:</strong></p>
+                            <ul class="ps-4">
+                                <li>All orders are subject to acceptance and availability</li>
+                                <li>We reserve the right to refuse or cancel any order</li>
+                                <li>Order confirmation will be sent via email</li>
+                            </ul>
+                            <p class="mt-3"><strong>Payment:</strong></p>
+                            <ul class="ps-4">
+                                <li>We accept payments through SSLCommerz gateway</li>
+                                <li>All payments must be made in full before order processing</li>
+                                <li>We do not store credit card information on our servers</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">6. Shipping and Delivery</h2>
+                        <div class="text-muted">
+                            <ul class="ps-4">
+                                <li>Delivery times are estimates and not guaranteed</li>
+                                <li>Risk of loss passes to you upon delivery</li>
+                                <li>We are not responsible for delays caused by shipping carriers</li>
+                                <li>Additional shipping charges may apply for remote locations</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">7. Returns and Refunds</h2>
+                        <div class="text-muted">
+                            <ul class="ps-4">
+                                <li>Returns must be initiated within 30 days of delivery</li>
+                                <li>Products must be in original condition and packaging</li>
+                                <li>Certain products may not be eligible for return</li>
+                                <li>Refunds will be processed within 5-7 business days</li>
+                                <li>Original shipping costs are non-refundable</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">8. Intellectual Property</h2>
+                        <p class="text-muted">
+                            The FastKart website, including its content, features, and functionality, is owned by FastKart and is protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
+                        </p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">9. Privacy Policy</h2>
+                        <p class="text-muted">
+                            Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the website, to understand our practices.
+                        </p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">10. Limitation of Liability</h2>
+                        <p class="text-muted">
+                            FastKart shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.
+                        </p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">11. Changes to Terms</h2>
+                        <p class="text-muted">
+                            We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting on the website. Your continued use of the website after changes constitutes acceptance of the new terms.
+                        </p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 text-success mb-3">12. Contact Information</h2>
+                        <div class="text-muted">
+                            <p>If you have any questions about these Terms & Conditions, please contact us:</p>
+                            <address class="ps-4">
+                                <strong>FastKart Customer Service</strong><br>
+                                Email: support@fastkart.com<br>
+                                Phone: +1 (555) 123-4567<br>
+                                Address: 123 Commerce Street, Business District, City, State 12345
+                            </address>
+                        </div>
+                    </section>
+
+                    <div class="text-center mt-5">
+                        <a href="{% url 'home' %}" class="btn btn-success me-3">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                        <a href="{% url 'privacy_policy' %}" class="btn btn-outline-success">
+                            <i class="fas fa-shield-alt me-2"></i>Privacy Policy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

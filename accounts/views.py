@@ -13,13 +13,24 @@ from django.contrib.auth.tokens import default_token_generator
 from accounts.forms import CustomUserRegistrationForm
 from accounts.models import CustomUser
 from accounts.utils import send_verification_email, send_password_reset_email
+from orders.models import Order, OrderProduct  
 
+"""
 def landing(request):
     #return render(request, "accounts/temp.html")
     context = {}
     if request.user.is_authenticated:
         context['username'] = request.user.first_name + " " + request.user.last_name 
     return render(request, "landing-page.html", context) # in project level templates folder.
+"""
+
+def privacy_policy(request):
+    return render(request, "privacy_policy.html") # in project level templates folder.
+
+
+def terms_and_conditions(request):
+    return render(request, "terms_and_conditions.html") # in project level templates folder.
+
 
 # register
 def user_signup(request):
@@ -80,22 +91,44 @@ def user_logout(request):
 @login_required
 def user_dashboard(request):
     user = request.user
-
-    if request.method == "POST":
-        # TODO: use a form and show form errors in template
-        # TODO: let user change password
-        user.email = request.POST.get("email", user.email)
-        user.mobile = request.POST.get("mobile", user.mobile)
-        user.address_line_1 = request.POST.get("address_line_1", user.address_line_1)
-        user.address_line_2 = request.POST.get("address_line_2", user.address_line_2)
-        user.city = request.POST.get("city", user.city)
-        user.postcode = request.POST.get("postcode", user.postcode)
-        user.country = request.POST.get("country", user.country)
+    
+    if request.method == "POST": 
+        # Profile update logic (unchanged)
+        for field in ("email","mobile","address_line_1","address_line_2","city","postcode","country"):
+            val = request.POST.get(field, "").strip()
+            if val:
+                setattr(user, field, val)
         user.save()
-
+        messages.info(request, 'Profile updated successfully!')
         return redirect("profile")
-
-    context = {"user_info": user}
+    
+    # Fetch user's past orders with related data
+    past_orders = Order.objects.filter(
+        user=user,
+        status__in=["Completed", "Delivered"]  # Only completed orders
+    ).prefetch_related(
+        'order_products__product'  # Prefetch to avoid N+1 queries
+    ).order_by('-created_at')  # Most recent first
+    
+    # Get all order products from completed orders
+    order_products = OrderProduct.objects.filter(
+        order__user=user,
+        order__status__in=["Completed", "Delivered"]
+    ).select_related(
+        'product', 'order'
+    ).order_by('-created_at')  # Most recent first
+    
+    # Calculate total orders and total spent
+    total_orders = past_orders.count()
+    total_spent = sum(order.order_total for order in past_orders)
+    
+    context = {
+        "user_info": user,
+        "past_orders": past_orders,
+        "order_products": order_products,
+        "total_orders": total_orders,
+        "total_spent": total_spent,
+    }
     return render(request, "accounts/profile.html", context)
 
 

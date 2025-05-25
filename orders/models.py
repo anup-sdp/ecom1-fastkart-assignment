@@ -12,7 +12,6 @@ class Payment(TimeStampedModel):
     status = models.CharField(null=True, max_length=255)  # pending/paid/failed etc
 
 
-
 class Order(TimeStampedModel):
     """
     STATUS = (

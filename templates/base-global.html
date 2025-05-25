@@ -34,6 +34,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
     <!-- bootstrap css -->
+	<!-- which version of bootstrap ? 5.1.3  ? -->
     <link id="rtl-link" rel="stylesheet" type="text/css" href="{% static 'assets/css/vendors/bootstrap.css' %}">
 
     <!-- wow css -->
@@ -80,7 +81,7 @@
                                     <i class="iconly-Category icli"></i>
                                 </span>
                             </button>
-                            <!-- TODO: set link to home page -->
+                            <!-- TODO: set link to home page, done -->
                             <a href="{% url 'home' %}" class="web-logo nav-logo">
                                 <img src="{% static 'assets/images/logo/4.png'%}" class="img-fluid blur-up lazyload"
                                     alt="">
@@ -412,8 +413,7 @@
 
                                         <li class="nav-item dropdown new-nav-item">
                                             <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                                data-bs-toggle="dropdown">Pages <label
-                                                    class="new-dropdown">New</label></a>
+                                                data-bs-toggle="dropdown">Pages <label class="new-dropdown">New</label></a>  <!-- label -->  
                                             <ul class="dropdown-menu">
                                                 <li class="sub-dropdown-hover">
                                                     <a class="dropdown-item" href="javascript:void(0)">Email
@@ -551,8 +551,7 @@
 
                                 <li>
                                     <a href="compare.html" class="header-icon">
-                                        <small class="badge-number badge-light">2</small>
-
+                                        <!-- <small class="badge-number badge-light">2</small> -->										
                                         <i class="fas fa-exchange-alt"></i>
                                     </a>
                                 </li>
@@ -712,8 +711,14 @@
                 <div class="row g-md-4 gy-sm-5">
                     <div class="col-xxl-3 col-xl-4 col-sm-6">
                         <a href="index.html" class="foot-logo theme-logo">
-                            <img src= "{% static 'assets/images/logo/4.png' %}" class="img-fluid blur-up lazyload" alt="">
-                        </a>
+                            <img src= "{% static 'assets/images/logo/4.png' %}" class="img-fluid blur-up lazyload" alt="Fastkart logo">
+                        </a> 
+						<br><br>
+						<a href="{% url 'admin:index' %}">
+							<button type="button" style="background-color: gray; color: lightblue; border-radius: 8px;">
+								go to admin panel
+							</button>						
+						</a>
                         <p class="information-text information-text-2">it is a long established fact that a reader will
                             be distracted by the readable content.</p>
                         <ul class="social-icon">
@@ -864,8 +869,8 @@
                 <div class="left-footer">                    
 					<!-- <p class="light-text">2022 Copyright By Themeforest Powered By Pixelstrap</p> -->
 					<p class="text-white-50">&copy; 2025 Copyright By fastkart and co. All rights reserved. 
-						<a href="#" class="text-white ms-3 me-3">Terms & Conditions</a>
-						<a href="#" class="text-white">Privacy Policy</a>
+						<a href="{% url 'terms_and_conditions' %}" class="text-white ms-3 me-3">Terms & Conditions</a>
+						<a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a>
 					</p>					
                 </div>
 

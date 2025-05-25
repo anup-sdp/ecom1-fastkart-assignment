@@ -27,7 +27,7 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-	 <!-- Messages section -->
+	<!-- Messages section -->
 	<section class="container">
 		<div class="row">
 			<div class="col-12">
@@ -116,41 +116,7 @@
                                             <h4 class="table-title text-content">Price</h4>
                                             <h5>${{cart_item.product.discount_price}} <del class="text-content">${{cart_item.product.price}}</del></h5>
                                             <h6 class="theme-color">You Save : ${{ cart_item.product.savings | floatformat:2 }}</h6>
-                                        </td>
-
-                                        <!-- <td class="quantity">
-                                            <h4 class="table-title text-content">Qty</h4>
-                                            <div class="quantity-price">
-                                                <div class="cart_qty">
-                                                    <div class="input-group">
-                                                        <a href="{%url 'remove_cart' cart_item.product.slug %}" type="button" class="btn qty-left-minus"
-                                                            data-type="minus" data-field=""> <i class="fa fa-minus ms-0"></i> </a>                                                        
-                                                        <input class="form-control input-number qty-input" type="text" name="quantity" value="{{cart_item.quantity}}">														
-                                                        <a href="{%url 'add_cart' cart_item.product.slug%}" type="button" class="btn qty-right-plus"
-                                                            data-type="plus" data-field=""> <i class="fa fa-plus ms-0"></i> </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td> -->
-
-										<!-- <td class="quantity text-center">
-											<h4 class="table-title text-content">Qty</h4>
-											<div class="d-inline-flex align-items-center">
-											  <a href="{% url 'remove_cart' cart_item.product.slug %}"
-												 class="btn btn-outline-secondary"
-												 style="flex: 0 0 auto;">
-												<i class="fa fa-minus"></i>
-											  </a>
-											  <span class="mx-2" style="flex: 0 0 auto;">
-												{{ cart_item.quantity }}
-											  </span>
-											  <a href="{% url 'add_cart' cart_item.product.slug %}"
-												 class="btn btn-outline-secondary"
-												 style="flex: 0 0 auto;">
-												<i class="fa fa-plus"></i>
-											  </a>
-											</div>
-										</td> -->
+                                        </td>                                        
 										  
 										<td class="quantity text-center">
 											<h4 class="table-title text-content">Qty</h4>

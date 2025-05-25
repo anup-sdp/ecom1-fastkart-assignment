@@ -20,6 +20,7 @@ from .utils import send_order_confirmation_email
 
 
 from django.contrib import messages
+from django.db import transaction # ---
 
 @csrf_exempt
 @login_required
@@ -27,69 +28,77 @@ def place_order(request):
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).last()
     else:  
-        cart = Cart.objects.filter(session_key= get_session_key).last()
+        cart = Cart.objects.filter(session_key=get_session_key).last()
+    
     cart_products = CartProduct.objects.filter(cart=cart).select_related("product") 
     if cart_products.count() == 0:
         messages.info(request, f"Your Cart is Empty")
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'home'))        
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'home'))
     
     total_price = 0
     quantity = 0
     for item in cart_products:
-        total_price += item.product.price * item.quantity  # discount_percentage ? # in case of n+1 problem, for each item there will be a query.
+        total_price += item.product.price* (100-item.product.discount_percentage)/100 * item.quantity
         quantity += item.quantity
 
-	#
-    if request.method == "POST":   # clicked "place order" button
-        payment_option = request.POST.get("payment_method")  # cash / sslcommerz
+    if request.method == "POST":
+        payment_option = request.POST.get("payment_method")
 
-        try:            
-            order_number = f"{datetime.now().strftime('%Y%m%d%H%M%S')}{random.randint(100000, 999999)}"   # '20250514153045' (May 2025, 3:30:45 PM) + 6 digit random number            
-            # datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Output: '2025-05-14 15:30:45'
-            # order_number = f"{timezone.now().strftime('%Y%m%d%H%M%S')}{random.randint(100000, 999999)}"
-            current_user = request.user   # if user is not authenticated, its an instance of AnonymousUser, not None.
+        try:
+            # Use database transaction to ensure data consistency
+            with transaction.atomic():
+                order_number = f"{datetime.now().strftime('%Y%m%d%H%M%S')}{random.randint(100000, 999999)}"
+                current_user = request.user
 
-            order = Order.objects.create(
-                user=current_user,
-                mobile=current_user.mobile,  # request.POST.get("mobile") -- if from form data
-                address_line_1=current_user.address_line_1,
-                address_line_2=current_user.address_line_2,
-                country=current_user.country,
-                postcode=current_user.postcode,
-                city=current_user.city,
-                order_note=request.POST.get("order_note", ""),
-                order_total=total_price,
-                status="Pending",
-                order_number=order_number,
-            )
-			# session key is in Cart if needed
-            for cart_item in cart_products:
-                OrderProduct.objects.create(
-                    order=order,
-                    product=cart_item.product,
-                    quantity=cart_item.quantity,
-                    product_price=cart_item.product.price,
+                order = Order.objects.create(
+                    user=current_user,
+                    mobile=current_user.mobile,
+                    address_line_1=current_user.address_line_1,
+                    address_line_2=current_user.address_line_2,
+                    country=current_user.country,
+                    postcode=current_user.postcode,
+                    city=current_user.city,
+                    order_note=request.POST.get("order_note", ""),
+                    order_total=total_price,
+                    status="Pending",
+                    order_number=order_number,
                 )
 
-                product = Product.objects.get(id=cart_item.product.id)
-                if product.stock >= cart_item.quantity:
-                    product.stock -= cart_item.quantity
-                    product.save()
+                # Create order products and check stock availability
+                for cart_item in cart_products:
+                    # Check if enough stock is available
+                    product = Product.objects.select_for_update().get(id=cart_item.product.id)
+                    if product.stock < cart_item.quantity:
+                        raise ValueError(f"Insufficient stock for {product.name}. Available: {product.stock}, Requested: {cart_item.quantity}")
 
-            send_order_confirmation_email(current_user, order)  # only if logged in
+                    OrderProduct.objects.create(
+                        order=order,
+                        product=cart_item.product,
+                        quantity=cart_item.quantity,
+                        product_price=cart_item.product.price,
+                    )
 
-            if payment_option == "cash":
-                cart_products.delete()
-                #return redirect("order_complete")  # ---- Reverse for 'order_complete' not found.
-                return HttpResponse("<h3>Your payment is successful</h3>") # ------------------------------------------------------------------------------------------------------------
-            elif payment_option == "sslcommerz":
-                return redirect("payment")
-        # edge cases: user added products to orders but payment was unsuccessful, then avaiable quantity fix.
-		# see: django cron job
+                if current_user.is_authenticated:
+                    send_order_confirmation_email(current_user, order)
+                    messages.info(request, "An email was sent!")
+
+                if payment_option == "cash":
+                    # Reduce product stock for cash payments (immediate confirmation)
+                    reduce_product_stock(cart_products)
+                    # Delete cart products after successful stock reduction
+                    cart_products.delete()
+                    return HttpResponse("<h3>Your payment with cash is successful</h3>")
+                elif payment_option == "sslcommerz":
+                    # For SSLCommerz, stock will be reduced after payment confirmation
+                    return redirect("payment")
+
+        except ValueError as ve:
+            messages.error(request, str(ve))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'home'))
         except Exception as e:
-            return HttpResponse("Error occurred: " + str(e))
+            messages.error(request, f"Error occurred: {str(e)}")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'home'))
 
-    #
     context = {
         "total_price": total_price,
         "quantity": quantity,
@@ -101,7 +110,7 @@ def place_order(request):
 
 
 #@login_required
-def payment(request):
+def payment(request):  # non-cash payment
     # https://pypi.org/project/sslcommerz-python-api/
     # https://pypi.org/project/sslcommerz-python/
     # https://www.youtube.com/watch?v=krTt8Xdchow&list=PLJh8Hi_cW8DZzzjC0tBLqhgPTv2NBlnCc&index=81&t=20s
@@ -179,8 +188,7 @@ def payment(request):
     
     if response_data["status"] == "FAILED":
         print('failedreason: ',response_data['failedreason'])
-        order.status = "failed"
-        # TODO: restock product
+        order.status = "failed"        
         order.save()                
         messages.info(request, f"Payment failed! error: {response_data['failedreason']}")  # occured: Payment failed! error: Store Credential Error Or Store is De-active
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'home'))
@@ -193,8 +201,8 @@ def payment_status(request):  # in yasir bros code payment_status + sslc_complet
         payment_data = request.POST
         if payment_data["status"] == "VALID":
             val_id = payment_data["val_id"]
-            tran_id = payment_data["tran_id"]
-
+            tran_id = payment_data["tran_id"]            
+            messages.success(request, "Your payment was successful!")
             return HttpResponseRedirect(reverse("sslc_complete", kwargs={"val_id": val_id, "tran_id": tran_id}))  # search: HttpResponseRedirect, reverse --------
         else:
             #order = Order.objects.filter(user=request.user).last()
@@ -209,31 +217,108 @@ def payment_status(request):  # in yasir bros code payment_status + sslc_complet
 
 def sslc_complete(request, val_id, tran_id):
     try:
-        # save to Payment class ?
-        #order = Order.objects.filter(user=request.user, is_ordered=False).last()
-        order = Order.objects.filter(user=request.user, status="Pending").last()  # -----------------
-        payment = Payment.objects.create(
-            user=request.user,
-            payment_id=val_id,
-            payment_method="SSLCommerz",
-            amount_paid=order.order_total,
-            status="Completed",
-        )
-       
-        order.status = "Completed"
-        order.payment = payment
-        order.save()
-        
-        #Cart.objects.filter(user=request.user).last().delete()  # delete last one
-        Cart.objects.filter(user=request.user).delete() # delete all
+        with transaction.atomic():
+            order = Order.objects.filter(user=request.user, status="Pending").last()
+            if not order:
+                return HttpResponse("No pending order found", status=404)
+
+            # Get the order products to reduce stock
+            order_products = OrderProduct.objects.filter(order=order).select_related("product")
+            
+            # Check stock availability before reducing
+            for order_product in order_products:
+                product = Product.objects.select_for_update().get(id=order_product.product.id)
+                if product.stock < order_product.quantity:
+                    # Log this issue or handle it appropriately
+                    messages.warning(request, f"Warning: Insufficient stock for {product.name}")
+                    # You might want to partially fulfill or cancel the order here
+                    
+            payment = Payment.objects.create(
+                user=request.user,
+                payment_id=val_id,
+                payment_method="SSLCommerz",
+                amount_paid=order.order_total,
+                status="Completed",
+            )
+           
+            order.status = "Completed"
+            order.payment = payment
+            order.save()
+            
+            # Reduce product stock after successful payment
+            reduce_product_stock_from_order(order_products)
+            
+            # Delete user's cart after successful payment and stock reduction
+            Cart.objects.filter(user=request.user).delete()
 
         context = {
             "order": order,
             "transaction_id": tran_id,
         }
-        return render(request, "orders/status.html", context)  # order success
+        return render(request, "orders/status.html", context)
 
     except Order.DoesNotExist:
         return HttpResponse("Order not found", status=404)
     except Exception as e:
         return HttpResponse(f"An error occurred: {str(e)}", status=500)
+
+
+# Helper function to reduce stock from cart products
+def reduce_product_stock(cart_products):
+    """
+    Reduce product stock based on cart products.
+    Used for immediate payments like cash.
+    """
+    for cart_item in cart_products:
+        product = Product.objects.select_for_update().get(id=cart_item.product.id)
+        if product.stock >= cart_item.quantity:
+            product.stock -= cart_item.quantity
+            # Set availability to False if stock reaches 0
+            if product.stock == 0:
+                product.available = False
+            product.save()
+        else:
+            # This shouldn't happen if we checked earlier, but just in case
+            raise ValueError(f"Insufficient stock for {product.name}")
+
+
+# Helper function to reduce stock from order products  
+def reduce_product_stock_from_order(order_products):
+    """
+    Reduce product stock based on order products.
+    Used after payment confirmation (like SSLCommerz).
+    """
+    for order_product in order_products:
+        product = Product.objects.select_for_update().get(id=order_product.product.id)
+        if product.stock >= order_product.quantity:
+            product.stock -= order_product.quantity
+            # Set availability to False if stock reaches 0
+            if product.stock == 0:
+                #product.available = False
+                pass
+            product.save()
+        else:
+            # Log this issue - payment was successful but stock is insufficient
+            # You might want to implement a notification system here
+            print(f"Warning: Insufficient stock for {product.name} in order {order_product.order.order_number}")
+
+
+# Optional: Function to handle failed payments and restore stock
+def restore_product_stock_for_failed_order(order):
+    """
+    Restore product stock if payment fails.
+    This can be called from a payment failure handler.
+    """
+    order_products = OrderProduct.objects.filter(order=order).select_related("product")
+    
+    with transaction.atomic():
+        for order_product in order_products:
+            product = Product.objects.select_for_update().get(id=order_product.product.id)
+            product.stock += order_product.quantity
+            if product.stock > 0:
+                product.available = True
+            product.save()
+        
+        # Update order status
+        order.status = "Cancelled"
+        order.save()

@@ -1,3 +1,4 @@
+<!-- comes from orders, place_order function -->
 {% extends 'base-global.html' %}
 {% load static %}
 {% block title %}Checkout{% endblock %}
@@ -76,31 +77,27 @@
                                                                 <input class="form-check-input" type="radio" name="jack"
                                                                     id="flexRadioDefault1">
                                                             </div>
-
                                                             <div class="label">
                                                                 <label>Home</label>
                                                             </div>
 
                                                             <ul class="delivery-address-detail">
                                                                 <li>
-                                                                    <h4 class="fw-500">{{user.username }}</h4>
+                                                                    <h4 class="fw-500">{{user.first_name}} {{user.last_name}}</h4>
                                                                 </li>
                                                                 <li>
                                                                     <p class="text-content"><span
                                                                             class="text-title">Address
-                                                                            : </span>{{user.userprofile.address_line_1}}, {{user.userprofile.address_line_2}}</p>
+                                                                            : </span>{{user.full_address}}</p>
                                                                 </li>
-
-                                                                <li>
-                                                                    <h6 class="text-content"><span
-                                                                            class="text-title">Pin Code
-                                                                            :</span> +880</h6>
-                                                                </li>
-
                                                                 <li>
                                                                     <h6 class="text-content mb-0"><span
-                                                                            class="text-title">Phone
-                                                                            :</span> + 88 {{user.userprofile.mobile}}</h6>
+                                                                            class="text-title">email
+                                                                            :</span> {{user.email}}</h6>
+                                                                </li>
+                                                                <li>
+                                                                    <h6 class="text-content mb-0"><span
+                                                                            class="text-title">Phone :</span> + 88 {{user.mobile}}</h6>                                                                           
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -133,8 +130,7 @@
                                                                     <input class="form-check-input" type="radio"
                                                                         name="standard" id="standard" checked>
                                                                     <label class="form-check-label"
-                                                                        for="standard">Standard
-                                                                        Delivery Option</label>
+                                                                        for="standard">Standard Delivery Option</label>                                                                        
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -282,7 +278,7 @@
                     <div class="right-side-summery-box">
                         <div class="summery-box-2">
                             <div class="summery-header">
-                                <h3>Order Summery</h3>
+                                <h3>Order Summary</h3>
                             </div>
 
 

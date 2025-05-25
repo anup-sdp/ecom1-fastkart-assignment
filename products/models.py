@@ -49,9 +49,7 @@ class Product(TimeStampedModel):
     stock = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
     unit = models.CharField(max_length=100, null=True, blank=True)
-    rating = models.DecimalField(
-        max_digits=5, decimal_places=2, default=0.00, null=True, blank=True
-    )
+    rating = models.DecimalField( max_digits=5, decimal_places=2, default=0.00, null=True, blank=True)    
     category = models.ForeignKey(Category, related_name="products", on_delete=models.CASCADE) # if models.SET_NULL, null = True needed, 
     # here user wont provide related_name
     # Forward relation: product.category  # Gets the Category object for this product
@@ -59,6 +57,7 @@ class Product(TimeStampedModel):
     
     def is_new(self):
         return self.updated_at >= timezone.now() - datetime.timedelta(days=7)
+        # return timezone.now() - self.updated_at < timedelta(days=7)  # from datetime import timedelta
     
     def save(self, *args, **kwargs):
         #self.slug = slugify(self.name)
@@ -139,13 +138,20 @@ products_in_category = electronics.product_set.all() # Django's default related_
 class Review(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")    
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="reviews")
-    rating = models.FloatField()
-    # rating = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],)
     review = models.TextField()
+    rating = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
     is_approved = models.BooleanField(default=True)  # instead of status used in main github
     def __str__(self):
-        return f"Review by {self.user.email} for {self.product.name}"
+        return f"Review by {self.user.first_name} for {self.product.name}"
     
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(rating__gte=0.0) & models.Q(rating__lte=5.0),
+                name='rating_range'
+            )
+        ]
+# ⭐    
 
 
 class ProductImage(models.Model):

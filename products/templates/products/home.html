@@ -246,6 +246,10 @@
 			                    <del class="text-muted">$ {{ product.price }}</del>
 			                    <span class="badge bg-danger ms-2">{{ product.discount_percentage }}% OFF</span>
 			                {% endif %}
+							<!-- {% load custom_filters %}
+                			{% if product.updated_at >= now|add_days:-7 %}
+                			<span class="badge rounded-pill bg-info">New Arrival</span>
+                			{% endif %} -->
 			            </p>
 			        </div>
 			    </div>
@@ -292,32 +296,7 @@
                                 <a href="{% url 'category_products' category.slug %}">
                                     <img src="{{ category.image.url }}" class="img-fluid blur-up lazyload"
                                         alt="{{category.name}}">
-                                </a>
-								<!-- #TODO: set category_products page -->
-								<!--  using as -->
-
-								<!-- {% url "category_products" category.slug as category_url %}
-								<button onclick="location.href = '{{ category_url }}';" class="btn shop-button">
-									<span>Shop Now</span>
-									<i class="fas fa-angle-right"></i>
-								</button> -->
-
-								<!-- #TODO: set category_products page -->
-								<!-- using with -->
-
-								<!-- {% with category_products='category_products' %}								
-								<button onclick="location.href = '{% url category_products category.slug %}';" class="btn shop-button">{% endwith %}									
-									<span>Shop Now</span>
-									<i class="fas fa-angle-right"></i>
-								</button> -->
-
-								<!-- wrapping by a tag-->
-								<!-- <a href="{% url 'category_products' category.slug %}">
-									<button class="btn shop-button">
-										<span>Shop Now</span>
-										<i class="fas fa-angle-right"></i>
-									</button>
-								</a> -->
+                                </a>								
 
 								<a href="{% url 'category_products' category.slug %}" class="btn shop-button">
 									<span>Shop Now</span>

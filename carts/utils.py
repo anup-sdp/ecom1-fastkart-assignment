@@ -5,8 +5,12 @@ def get_session_key(request):
     if not session_key:
         session_key = request.session.create()  # Create a new session key if it doesn't exist
     return session_key
-    """
+
+
+
+"""
+def get_session_key(request):
     if not request.session.session_key:
-            request.session.create()
-        return request.session.session_key
-    """
+        request.session.create()
+    return request.session.session_key
+"""

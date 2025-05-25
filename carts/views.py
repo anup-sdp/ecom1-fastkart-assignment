@@ -5,10 +5,15 @@ from products.models import Product
 
 from .models import Cart, CartProduct
 from .utils import get_session_key
-
+from django.urls import reverse
+from django.contrib import messages
 
 def add_cart(request, product_slug):  # add a product to cart
+    url = request.META.get("HTTP_REFERER", "") or reverse("home")
     product = get_object_or_404(Product, slug=product_slug)
+    if product.stock <=0 or product.available==False:
+        messages.info(request, "sorry, not enough product in stock!")
+        return redirect(url)
     try:
         cart = Cart.objects.get(session_key=get_session_key(request))
     except Cart.DoesNotExist:
@@ -27,12 +32,9 @@ def add_cart(request, product_slug):  # add a product to cart
         )
 
     cart_item.quantity += 1
-    cart_item.save()
-    
-	
-    url = request.META.get("HTTP_REFERER")  # to go back to calling url
-    return redirect(url)
-	# return redirect(request.path) -- ?	
+    cart_item.save()    
+    return redirect(url)  # to go back to calling url
+	# return redirect(request.path) -- ?
 	# search: update the cart item quantity via AJAX so the page doesn’t reload
 
 
@@ -52,7 +54,8 @@ def remove_cart(request, product_slug):
     else:
         cart_item.delete()
 
-    url = request.META.get("HTTP_REFERER")   # Could be None
+    # url = request.META.get("HTTP_REFERER")   # Could be None
+    url = request.META.get("HTTP_REFERER", "") or reverse("home")
     return redirect(url)
     #return redirect(url or "cart_detail")   # Fallback to "cart_detail" if url is None
 
@@ -60,14 +63,13 @@ def remove_cart(request, product_slug):
 def cart_detail(request, total_price=0, quantity=0, cart_items=None):
     session_key=get_session_key(request)
     if request.user.is_authenticated:
-        #cart = get_object_or_404(Cart, user=request.user) # disabled to not see Page not found (404), when user has no cart.
+        # cart = get_object_or_404(Cart, user=request.user) # disabled to not see Page not found (404), when user has no cart.
         # cart, created = Cart.objects.get_or_create(user=request.user, defaults={'session_key': session_key})  # returns tuple. # problem for multiple carts
         """"""
-        try:
-            #cart = Cart.objects.get(user=request.user).last()  # expects only 1, error if multiple
-            cart = Cart.objects.filter(user=request.user).last()
-        except Cart.DoesNotExist:    
-            cart = Cart.objects.create(user=request.user)  # Handle missing object (e.g., create a new Cart)
+        #cart = Cart.objects.get(user=request.user).last()  # expects only 1, error if multiple
+        cart = Cart.objects.filter(user=request.user).last() # returns None if not exists
+        if cart == None:
+            cart = Cart.objects.create(user=request.user)  # Handle missing object (e.g., create a new Cart)        
         
     else:
         #cart = get_object_or_404(Cart, session_key=session_key)
@@ -81,7 +83,7 @@ def cart_detail(request, total_price=0, quantity=0, cart_items=None):
     total_price = 0
     for item in cart_items:
         dp = (100-item.product.discount_percentage)/100  # discount_percentage -> dp, 10% -> 0.9
-        total_price += item.product.price * dp * item.quantity 
+        total_price += item.product.price * dp * item.quantity
         quantity += item.quantity
 
     context = {

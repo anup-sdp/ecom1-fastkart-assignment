@@ -78,8 +78,8 @@ pw: abc123
 normal users:
 anupbarua30@gmail.com
 -abc123
-anup30clans@gmail.com
--abc123
+anup30clans@gmail.com -----------------------------------
+- abc123
 
 at 50:00: debugger vs code. 
 eg: https://forum.codewithmosh.com/t/how-do-i-learn-debugging-django-vs-code-program/27680
@@ -167,3 +167,4 @@ git push -u origin main
 
 git add .
 git commit -m "final"
+git push -u origin main

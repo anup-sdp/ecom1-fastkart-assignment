@@ -75,7 +75,7 @@ def place_order(request):
                         order=order,
                         product=cart_item.product,
                         quantity=cart_item.quantity,
-                        product_price=cart_item.product.price,
+                        product_price=cart_item.product.price *(100-cart_item.product.discount_percentage)/100,  # discount_percentage
                     )
 
                 if current_user.is_authenticated:

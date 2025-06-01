@@ -94,10 +94,10 @@ def user_dashboard(request):
     
     if request.method == "POST": 
         # Profile update logic (unchanged)
-        for field in ("email","mobile","address_line_1","address_line_2","city","postcode","country"):
+        for field in ("email", "first_name", "last_name" ,"mobile","address_line_1","address_line_2","city","postcode","country"):
             val = request.POST.get(field, "").strip()
             if val:
-                setattr(user, field, val)
+                setattr(user, field, val)  # eg. user.email = val
         user.save()
         messages.info(request, 'Profile updated successfully!')
         return redirect("profile")
@@ -107,16 +107,18 @@ def user_dashboard(request):
         user=user,
         status__in=["Completed", "Delivered"]  # Only completed orders
     ).prefetch_related(
-        'order_products__product'  # Prefetch to avoid N+1 queries
+        'order_products__product'  # Prefetch to avoid N+1 queries,  .prefetch_related('order_products__product__images')
     ).order_by('-created_at')  # Most recent first
     
     # Get all order products from completed orders
     order_products = OrderProduct.objects.filter(
-        order__user=user,
-        order__status__in=["Completed", "Delivered"]
+        order__user=user,  # __ in Django is used for relationship traversal and field lookups. (use . in templates and in python code)
+        order__status__in=["Completed", "Delivered"]  # __icontains, __startswith
     ).select_related(
         'product', 'order'
-    ).order_by('-created_at')  # Most recent first
+    ).order_by('-created_at')  # can add .prefetch_related('product__images') in clain   # .order_by('-order__created_at', '-created_at')   ?
+        
+    
     
     # Calculate total orders and total spent
     total_orders = past_orders.count()
@@ -124,7 +126,7 @@ def user_dashboard(request):
     
     context = {
         "user_info": user,
-        "past_orders": past_orders,
+        "past_orders": past_orders,  # not used in template
         "order_products": order_products,
         "total_orders": total_orders,
         "total_spent": total_spent,
@@ -137,7 +139,7 @@ def verify_email(request, uidb64, token):
         print("in verify_email(), uidb64 = ", uidb64)  # uidb64 =  MjQ
         uid = urlsafe_base64_decode(uidb64).decode()
         print("in verify_email(), uid, type = ", uid, type(uid))  # 24 <class 'str'>
-        #user = CustomUser.objects.get(pk=uid)       
+        #user = CustomUser.objects.get(pk=uid)
         user = CustomUser.objects.get(pk=int(uid))  # Convert to int
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist) as e:
         print(f"Error occurred: {str(e)}")

@@ -19,6 +19,7 @@ class Order(TimeStampedModel):
         ("Accepted", "Accepted"),
         ("Completed", "Completed"),
         ("Cancelled", "Cancelled"),
+        ("Delivered", "Delivered"),
     )
 	"""
     user = models.ForeignKey(CustomUser, null=True, related_name="orders", on_delete=models.SET_NULL)  # can have order without user.
@@ -28,7 +29,7 @@ class Order(TimeStampedModel):
     order_note = models.CharField(null=True, blank=True, max_length=255)
     
     order_total = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(null=True, max_length=255, default="Pending")  # pending/Pending, Failed,
+    status = models.CharField(null=True, max_length=255, default="Pending")  # pending/Pending, Failed, Completed, Delivered
     
     address_line_1 = models.CharField(null=True, blank=True, max_length=100)  # copied from CustomUser
     address_line_2 = models.CharField(null=True, blank=True, max_length=100)

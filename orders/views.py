@@ -82,7 +82,7 @@ def place_order(request):
                     send_order_confirmation_email(current_user, order)
                     messages.info(request, "An email was sent!")
 
-                if payment_option == "cash":
+                if payment_option == "cash":  # todo: create and save payment object for cash on delevery
                     # Reduce product stock for cash payments (immediate confirmation)
                     reduce_product_stock(cart_products)
                     # Delete cart products after successful stock reduction
@@ -110,7 +110,7 @@ def place_order(request):
 
 
 #@login_required
-def payment(request):  # non-cash payment
+def payment(request):  # non-cash payment, when payment_option == "sslcommerz"
     # https://pypi.org/project/sslcommerz-python-api/
     # https://pypi.org/project/sslcommerz-python/
     # https://www.youtube.com/watch?v=krTt8Xdchow&list=PLJh8Hi_cW8DZzzjC0tBLqhgPTv2NBlnCc&index=81&t=20s
